@@ -14,6 +14,7 @@ from .core.scan import scan_line
 from .core.secrets_collection import SecretsCollection
 from .core.usage import ParserBuilder
 from .exceptions import InvalidBaselineError
+from .output.sarif import format_sarif
 from .settings import get_plugins
 from .settings import get_settings
 
@@ -86,7 +87,11 @@ def handle_scan_action(args: argparse.Namespace) -> None:
 
         baseline.save_to_file(secrets, args.baseline_filename)
     else:
-        print(json.dumps(baseline.format_for_output(secrets, is_slim_mode=args.slim), indent=2))
+        output_format = getattr(args, 'output_format', 'json')
+        if output_format == 'sarif':
+            print(json.dumps(format_sarif(secrets), indent=2))
+        else:
+            print(json.dumps(baseline.format_for_output(secrets, is_slim_mode=args.slim), indent=2))
 
 
 def scan_adhoc_string(line: str) -> str:

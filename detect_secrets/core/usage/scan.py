@@ -85,6 +85,17 @@ def _add_initialize_baseline_options(parser: argparse.ArgumentParser) -> None:
             'slim baselines will need to be remade to be audited.'
         ),
     )
+    group.add_argument(
+        '--output-format',
+        dest='output_format',
+        choices=['json', 'sarif'],
+        default='json',
+        help=(
+            'Output format for scan results. "json" (default) produces the standard '
+            'detect-secrets baseline JSON. "sarif" produces a SARIF 2.1.0 document '
+            'compatible with GitHub Advanced Security and other SARIF consumers.'
+        ),
+    )
 
 
 def parse_args(args: argparse.Namespace) -> None:
